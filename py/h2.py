@@ -7,26 +7,32 @@ class h2():
     def data_convert(from_data):
         b = bytearray(from_data)
         decode = True
+        
         if len(b) > 0:
-            if b[0] == 128:
+            if b[0] == 128: # 进行解密
                 del b[0]
                 decode = False
+            else: # 进行编码转换
+                b = bytearray(b.decode('utf8').encode('gbk'))
+        else:
+            print("NULL File")
+            exit(2)
+        # 进行数据偏移操作
         for i in range(len(b)):
             b[i] ^= 0x78
-        if decode:
+            
+        if decode: # 加密后添加识别
             b.insert(0, 128)
-        b = b.decode('gbk').encode('utf8')
-        return b
+            return b
+        else: # 将解密编码进行转换
+            return b.decode('gbk').encode('utf8')
+            
     
     @classmethod
     def file_convert(self, from_file, to_file):
         ff = open(from_file, 'rb')
         read = ff.read()
-        # coding = detect(read)['encoding']
-        # print(coding)
-        # data = self.data_convert(read.decode(coding).encode('utf8'))
         data = self.data_convert(read)
-
         ff.close()
 
         tf = open(to_file, 'wb')
