@@ -52,9 +52,9 @@ def main(argv):
     
     for opt, arg in opts:
         if opt == '-h':
-            print("help: test.py -i <inputfile> -o <outputfile>")
+            print("help: python h2.py -i <inputfile> -o <outputfile>")
             print("          此命令处理单个文件")
-            print("      test.py -a <input dir>")
+            print("      python h2.py -a <input dir>")
             print("          此命令会处理目录下的所有文件,并会在目录下创建out目录,放入所有的解密文件")
             sys.exit()
         elif opt in ("-i", "--ifile"):
