@@ -41,23 +41,53 @@ class h2():
     
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
+        opts, args = getopt.getopt(argv, "hi:o:a:", ["ifile=", "ofile=", "all="])
     except getopt.GetoptError:
         print("test.py -i <inputfile> -o <outputfile>")
         sys.exit(2)
 
     inputfile = ''
     outputfile = ''
+    all_path = ''
     
     for opt, arg in opts:
         if opt == '-h':
             print("help: test.py -i <inputfile> -o <outputfile>")
+            print("          此命令处理单个文件")
+            print("      test.py -a <input dir>")
+            print("          此命令会处理目录下的所有文件,并会在目录下创建out目录,放入所有的解密文件")
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
         elif opt in ("-o", "--ofile"):
             outputfile = arg
-
+        elif opt in ("-a", "--all"):
+            all_path = arg
+            
+    if all_path != '': # 处理整个目录
+        if os.path.isdir(all_path):
+            filelist = os.listdir(all_path)
+            
+            # out 目录处理, 不存在则创建
+            if len(filelist) != 0:
+                output_dir = os.path.join(all_path, 'out')
+                if os.path.exists(output_dir) is False:
+                    os.makedirs(output_dir)
+            else:
+                print('DIR is NULL')
+                exit(2)
+                
+            for filename in filelist:
+                filename_path = os.path.join(all_path, filename)
+                if os.path.isfile(filename_path):
+                    absfilename = os.path.basename(filename).split('.')[0]
+                    output_filename = '%s_new.txt' % absfilename
+                    output_path = os.path.join(all_path, 'out', output_filename)
+                
+                    h2.file_convert(filename_path, output_path)
+        else:
+            print('-a must be a directory.')
+        return
     if outputfile == '':
         filename = os.path.basename(inputfile).split('.')[0]
         outputfile = './%s_new.txt' % filename
