@@ -75,7 +75,7 @@ class MdlBase():
             bld = self.SModelBld()
 
             bld.itype = int(struct.unpack('h', f.read(2))[0])
-            print('bld.type: %d' % bld.itype)
+            print('\nbld.type: %d' % bld.itype)
 
             test = 'B4 A5 B7 A2 Bf E9'
             or_name = struct.unpack('32s', f.read(32))[0]
@@ -85,6 +85,8 @@ class MdlBase():
             bld.wManualID = struct.unpack('h', f.read(2))[0]
             bld.wAutoID = struct.unpack('h', f.read(2))[0]
             bld.PartMng = struct.unpack('2h', f.read(4))[0]
+
+            print('manualID:%d,\tAutoID:%d' % (bld.wManualID, bld.wAutoID))
 
             bld.PartNum = struct.unpack('h', f.read(2))[0]
             bld.DownNum = struct.unpack('h', f.read(2))[0]
@@ -104,17 +106,24 @@ class MdlBase():
                 for j in range(bld.m_cxDisMetrix):
                     building_node = struct.unpack('2c', f.read(2))[0]
 
-            bld.m_wSound = struct.unpack('h', f.read(2))
-            bld.m_bLight = struct.unpack('c', f.read(1))
-            bld.m_bAniDisplay = struct.unpack('c', f.read(1))
+            bld.m_wSound = struct.unpack('h', f.read(2))[0]
+            bld.m_bLight = struct.unpack('c', f.read(1))[0]
+            bld.m_bAniDisplay = struct.unpack('c', f.read(1))[0]
 
             for z in range(bld.PartNum):
                 a_bld = self.AModelBld()
-                a_bld.m_szName = struct.unpack('8c', f.read(8))
-                a_bld.m_booIsSpr = struct.unpack('c', f.read(1))
-                a_bld.m_dPicID = struct.unpack('4c', f.read(4))
-                a_bld.m_pos_x = struct.unpack('i', f.read(4))
-                a_bld.m_pos_y = struct.unpack('i', f.read(4))
+
+                or_m_name = struct.unpack('8s', f.read(8))[0]
+                a_bld.m_szName = or_m_name.replace(b'\xcd', b'')
+                #print(or_m_name)
+                print('\tszname:%s' % a_bld.m_szName.decode(encoding='gbk', errors='replace'))
+                a_bld.m_booIsSpr = struct.unpack('c', f.read(1))[0]
+                a_bld.m_dPicID = struct.unpack('4s', f.read(4))[0]
+                #print(a_bld.m_dPicID)
+                print('\tpicID:%s' % a_bld.m_dPicID)
+                
+                a_bld.m_pos_x = struct.unpack('i', f.read(4))[0]
+                a_bld.m_pos_y = struct.unpack('i', f.read(4))[0]
 
             # print("%d : %s" % (bld.iModelAutoID, hex(bld.iModelAutoID)))
             num -= 1
