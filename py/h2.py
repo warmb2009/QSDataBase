@@ -44,7 +44,7 @@ class h2():
 
 def main(argv):
     try:
-        opts = getopt.getopt(argv, "hi:o:a:", ["ifile=", "ofile=", "all="])
+        opts = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
     except getopt.GetoptError:
         print("test.py -i <inputfile> -o <outputfile>")
         sys.exit(2)
@@ -52,8 +52,9 @@ def main(argv):
     inputfile = ''
     outputfile = ''
     all_path = ''
-
-    for opt, arg in opts:
+    print(opts)
+    print(len(opts))
+    for opt, arg in opts[0]:
         if opt == '-h':
             print("help: python h2.py -i <inputfile> -o <outputfile>")
             print("          此命令处理单个文件")
