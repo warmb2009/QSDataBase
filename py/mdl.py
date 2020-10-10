@@ -118,10 +118,10 @@ class MdlBase():
                 #print(or_m_name)
                 print('\tszname:%s' % a_bld.m_szName.decode(encoding='gbk', errors='replace'))
                 a_bld.m_booIsSpr = struct.unpack('c', f.read(1))[0]
-                a_bld.m_dPicID = struct.unpack('4s', f.read(4))[0]
-                #print(a_bld.m_dPicID)
-                print('\tpicID:%s' % a_bld.m_dPicID)
-                
+                a_bld.m_dPicID = struct.unpack('i', f.read(4))[0]
+                # print(a_bld.m_dPicID)
+                # print('\tpicID:%s' % a_bld.m_dPicID)
+                print('\tpicID:%d' % int(a_bld.m_dPicID))
                 a_bld.m_pos_x = struct.unpack('i', f.read(4))[0]
                 a_bld.m_pos_y = struct.unpack('i', f.read(4))[0]
 
